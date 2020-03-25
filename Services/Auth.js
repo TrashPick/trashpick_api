@@ -18,14 +18,22 @@ module.exports = {
 				error: { type: 'client', message: 'Please provide Mobile Network' }
 			};
 		} else {
-			await user.save();
-			return {
-				success: {
-					type: 'authsuccess',
-					message: 'User successfully registered',
-					token: user.createWebToken()
+			try {
+				await user.save();
+				return {
+					success: {
+						type: 'authsuccess',
+						message: 'User successfully registered',
+						token: user.createWebToken()
+					}
+				};
+			} catch (e) {
+				if (e.code === 11000) {
+					return {
+						error: { type: 'client', message: 'Account already Exist' }
+					};
 				}
-			};
+			}
 		}
 	},
 

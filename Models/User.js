@@ -9,7 +9,8 @@ const User = new Schema({
 	mobileNumber: { type: Number, required: true },
 	mobileNetwork: { type: String },
 	country: { type: String },
-	balance: { type: Number, default: 0.0 }
+	credits: { type: Number, default: 0.0 },
+	username: { type: String }
 });
 
 User.methods.generateID = function(mobileNumber) {
