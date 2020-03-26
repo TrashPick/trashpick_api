@@ -7,14 +7,18 @@ module.exports = {
 		country,
 		mobileNetwork,
 		profileImage,
-		username
+		username,
+		firstname,
+		lastname
 	}) => {
 		let user = new User({
 			mobileNumber,
 			mobileNetwork,
 			country,
 			profileImage,
-			username
+			username,
+			firstname,
+			lastname
 		});
 
 		user.generateID(mobileNumber);
