@@ -5,6 +5,7 @@ const userRoute = Router();
 
 userRoute.post('/auth/newuser', async (req, res) => {
 	const response = await Auth.signup(req.body);
+	// console.log(response);
 	if (response.msg.type === 'success') {
 		res.send(response.msg.token);
 	} else {
