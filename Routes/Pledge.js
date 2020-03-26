@@ -1,0 +1,25 @@
+const { Router } = require('express');
+const Pledge = require('../Services/Pledge');
+const { getUserDataToken } = require('../Services');
+
+const pledgeRoute = Router();
+
+pledgeRoute.post('/newPledge', async (req, res) => {
+	const mPledge = await Pledge.createNewPledge(req.body);
+	res.send(mPledge);
+});
+
+pledgeRoute.get('/myPledges/:token', async (req, res) => {
+	const { userID } = getUserDataToken(req.params.token);
+	const mPledges = await Pledge.myPledges({ userID: userID });
+	res.send(mPledges);
+});
+
+pledgeRoute.post('/me/matchPledge/:pledgeID', async (req, res) => {
+	const matchPledge = await Pledge.matchPledges({
+		pledgeID: req.params.pledgeID
+	});
+	res.send(matchPledge);
+});
+
+module.exports = pledgeRoute;

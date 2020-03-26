@@ -1,28 +1,44 @@
 const User = require('../Models/User');
 
 module.exports = {
-	signup: async ({ mobileNumber, password, country, mobileNetwork }) => {
+	signup: async ({
+		mobileNumber,
+		password,
+		country,
+		mobileNetwork,
+		profileImage,
+		username
+	}) => {
 		let user = new User({
 			mobileNumber,
 			mobileNetwork,
-			country
+			country,
+			profileImage,
+			username
 		});
 
 		user.generateID(mobileNumber);
 		user.hashPassword(password);
 
 		if (country === undefined) {
-			return { error: { type: 'client', message: 'Please provide Country' } };
+			return {
+				msg: { type: 'error', message: 'Please provide Country', code: 401 }
+			};
 		} else if (mobileNetwork === undefined) {
 			return {
-				error: { type: 'client', message: 'Please provide Mobile Network' }
+				msg: {
+					type: 'error',
+					message: 'Please provide Mobile Network',
+					code: 401
+				}
 			};
 		} else {
 			try {
 				await user.save();
 				return {
-					success: {
-						type: 'authsuccess',
+					msg: {
+						code: 200,
+						type: 'success',
 						message: 'User successfully registered',
 						token: user.createWebToken()
 					}
@@ -30,7 +46,7 @@ module.exports = {
 			} catch (e) {
 				if (e.code === 11000) {
 					return {
-						error: { type: 'client', message: 'Account already Exist' }
+						msg: { type: 'error', code: 401, message: 'Account already Exist' }
 					};
 				}
 			}
@@ -42,19 +58,21 @@ module.exports = {
 		let user = await User.findOne({ mobileNumber: phone });
 		if (user !== null) {
 			//User is in Db
-			if (user.checkPassword(user.password)) {
+			if (user.checkPassword(password)) {
 				return {
-					success: {
-						type: 'authsuccess',
+					msg: {
+						type: 'success',
 						message: 'User successfully registered',
 						token: user.createWebToken()
 					}
 				};
 			} else {
-				return { error: { type: 'client', message: 'Invalid password' } };
+				return { msg: { type: 'error', message: 'Invalid password' } };
 			}
 		} else {
-			return { error: { type: 'client', message: 'Invalid Phone Number' } };
+			return {
+				msg: { type: 'error', message: 'Phone does not exist in databse' }
+			};
 		}
 	}
 };

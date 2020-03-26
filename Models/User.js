@@ -10,7 +10,9 @@ const User = new Schema({
 	mobileNetwork: { type: String },
 	country: { type: String },
 	credits: { type: Number, default: 0.0 },
-	username: { type: String }
+	username: { type: String },
+	profileImage: { type: String },
+	fcmToken: { type: String }
 });
 
 User.methods.generateID = function(mobileNumber) {
@@ -38,7 +40,10 @@ User.methods.createWebToken = function() {
 			userID: this.userID,
 			mobileNumber: this.mobileNumber,
 			mobileNetwork: this.mobileNetwork,
-			country: this.country
+			country: this.country,
+			username: this.username,
+			profileImage: this.profileImage,
+			credits: this.credits
 		},
 		jwtSecret
 	);

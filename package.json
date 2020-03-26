@@ -1,15 +1,18 @@
 {
-	"name": "Round10",
+	"name": "LionShare",
 	"version": "1.0.0",
 	"description": "a simple game of chance",
 	"main": "index.js",
 	"scripts": {
+		"start": "node index.js",
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon index.js"
 	},
 	"author": "Mushud",
 	"license": "ISC",
 	"dependencies": {
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
 		"crypto": "^1.0.1",
 		"express": "^4.17.1",
 		"jsonwebtoken": "^8.5.1",
