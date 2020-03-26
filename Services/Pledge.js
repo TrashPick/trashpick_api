@@ -1,5 +1,6 @@
 const Pledge = require('../Models/Pledge');
 const User = require('../Models/User');
+const Match = require('../Models/Match');
 const { getUserDataToken } = require('../Services');
 
 module.exports = {
@@ -71,20 +72,23 @@ module.exports = {
 			console.log('Payable', amountAvailabletoMatch - AmountToMatch);
 
 			if (AmountToMatch === 0) break;
-			const match = {
+
+			const match = new Match({
 				userID: fulfilledPledgesAvailable[i].userID,
+				userPledgeID: fulfilledPledgesAvailable[i]._id,
 				amountToPay:
 					AmountToMatch <= amountAvailabletoMatch
 						? AmountToMatch
 						: amountAvailabletoMatch,
 				date: new Date().toISOString(),
-				acknowledged: false
-			};
+				acknowledged: false,
+				pledgeID: pledgeID
+			});
 
 			const cP = await Pledge.findOneAndUpdate(
 				{ _id: currentPledge._id },
 				{
-					$push: { usersMatch: match },
+					$push: { usersMatch: match._id },
 					$inc: {
 						amountLeftForMatch:
 							AmountToMatch <= amountAvailabletoMatch
@@ -93,6 +97,8 @@ module.exports = {
 					}
 				}
 			);
+
+			await match.save();
 
 			await Pledge.findOneAndUpdate(
 				{ _id: fulfilledPledgesAvailable[i]._id },
@@ -116,7 +122,9 @@ module.exports = {
 
 			console.log('Amount Left', AmountToMatch);
 		}
+
 		const myNewMatch = await Pledge.findOne({ _id: pledgeID });
+
 		if (myNewMatch.amountLeftForMatch === 0) {
 			await await Pledge.findOneAndUpdate(
 				{ _id: pledgeID },
@@ -129,5 +137,17 @@ module.exports = {
 		return myNewMatch;
 	},
 
-	acknowledgePayment: async ({ pledgeID, userID }) => {}
+	acknowledgePayment: async ({ matchID, amount }) => {
+		const match = await Match.findOne({ _id: matchID });
+
+		const acknowledge = await Match.findByIdAndUpdate(
+			{ _id: matchID },
+			{
+				amountPayed: amount,
+				acknowledged: amount + match.amountPayed === match.amountToPay
+			}
+		);
+
+		return acknowledge;
+	}
 };
