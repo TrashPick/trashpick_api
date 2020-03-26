@@ -28,14 +28,6 @@ module.exports = {
 			return {
 				msg: { type: 'error', message: 'Please provide Country', code: 401 }
 			};
-		} else if (mobileNetwork === undefined) {
-			return {
-				msg: {
-					type: 'error',
-					message: 'Please provide Mobile Network',
-					code: 401
-				}
-			};
 		} else {
 			try {
 				await user.save();
