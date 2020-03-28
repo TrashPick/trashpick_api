@@ -1,4 +1,5 @@
 const User = require('../Models/User');
+const { getUserDataToken } = require('../Services');
 
 module.exports = {
 	signup: async ({
@@ -68,6 +69,30 @@ module.exports = {
 		} else {
 			return {
 				msg: { type: 'error', message: 'Phone does not exist in databse' }
+			};
+		}
+	},
+
+	getUserData: async (token) => {
+		const userDateFromToken = getUserDataToken(token);
+		const userDatafromDatabase = await User.findOne({
+			userID: userDateFromToken.userID
+		});
+
+		if (userDatafromDatabase !== null) {
+			return {
+				status: 200,
+				data: {
+					...userDateFromToken,
+					credits: userDatafromDatabase.credits,
+					firstname: userDatafromDatabase.firstname,
+					lastname: userDatafromDatabase.lastname
+				}
+			};
+		} else {
+			return {
+				status: 404,
+				data: 'user not found'
 			};
 		}
 	}
