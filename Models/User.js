@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 
 const User = new Schema({
 	firstname: { type: String },
-	lastname: {type: String},
-	userID: { type: String, required: true },
+	lastname: { type: String },
+	userID: { type: String, required: true, unique: true },
 	password: { hash: String, salt: String },
 	mobileNumber: { type: Number, required: true },
 	mobileNetwork: { type: String },
