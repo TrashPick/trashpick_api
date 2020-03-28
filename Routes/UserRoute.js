@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const Auth = require('../Services/Auth');
+const { getUserDataToken } = require('../Services');
 
 const userRoute = Router();
 
@@ -20,6 +21,11 @@ userRoute.post('/auth/signin', async (req, res) => {
 	} else {
 		res.status(401).send(response.msg.message);
 	}
+});
+
+userRoute.post('/auth/me', async (req, res) => {
+	const userData = await Auth.getUserData(req.body.token);
+	res.status(userData.status).send(userData.data);
 });
 
 module.exports = userRoute;
