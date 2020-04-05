@@ -22,4 +22,9 @@ pledgeRoute.post('/me/matchPledge/:pledgeID', async (req, res) => {
 	res.send(matchPledge);
 });
 
+pledgeRoute.get('/me/pledgeDetails/:pledgeID', async (req, res) => {
+	const pledgeDetailsResponse = await Pledge.getPledgeDetails(req.params);
+	res.status(pledgeDetailsResponse.status).send(pledgeDetailsResponse);
+});
+
 module.exports = pledgeRoute;
