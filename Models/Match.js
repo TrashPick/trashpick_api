@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 
 const match = new Schema({
+	to: { type: String },
 	userID: { type: String },
 	amountToPay: { type: Number },
 	amountPayed: { type: Number, default: 0 },
