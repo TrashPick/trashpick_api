@@ -21,15 +21,15 @@ module.exports = {
 		const userDetails = await User.findOne({ userID: userID });
 		//	console.log(userDetails);
 
-		const creditCharged = amount * 0.2;
+		const creditCharged = amount * 0.2 * 10;
 		console.log('Credits charged', creditCharged);
 		if (userDetails.credits >= creditCharged) {
 			const mPledge = new Pledge({
 				amount,
 				userID,
-				expectedAmount: 0.6 * amount + amount,
+				expectedAmount: 0.8 * amount + amount,
 				dateCreated: new Date().toUTCString(),
-				amountLeftForMatch: 0.6 * amount + amount
+				amountLeftForMatch: 0.8 * amount + amount
 			});
 
 			await mPledge.save();
@@ -43,6 +43,35 @@ module.exports = {
 		} else {
 			return 'Not enough credit balance';
 		}
+	},
+
+	getPledgeDetails: async ({ pledgeID }) => {
+		let currentPledge = await Pledge.findById(pledgeID);
+		if (currentPledge === null) return 'pledge not found';
+
+		let Pending = await Match.find({
+			userID: currentPledge.userID,
+			userPledgeID: pledgeID,
+			acknowledged: false
+		});
+
+		let PastTransactions = await Match.find({
+			userID: currentPledge.userID,
+			userPledgeID: pledgeID,
+			acknowledged: true
+		});
+
+		let IncomingFunds = await Match.find({
+			pledgeID: pledgeID,
+			acknowledged: false
+		});
+
+		return {
+			status: 200,
+			pending: Pending,
+			past: PastTransactions,
+			incoming: IncomingFunds
+		};
 	},
 
 	matchPledges: async ({ pledgeID }) => {
@@ -74,6 +103,7 @@ module.exports = {
 			if (AmountToMatch === 0) break;
 
 			const match = new Match({
+				to: currentPledge.userID,
 				userID: fulfilledPledgesAvailable[i].userID,
 				userPledgeID: fulfilledPledgesAvailable[i]._id,
 				amountToPay:
