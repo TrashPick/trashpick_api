@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const Auth = require('../Services/Auth');
 const { getUserDataToken } = require('../Services');
-const { rechargeCredits } = require('../Services/User');
+const { rechargeCredits, getUser } = require('../Services/User');
 
 const userRoute = Router();
 
@@ -32,6 +32,11 @@ userRoute.post('/auth/me', async (req, res) => {
 userRoute.post('/me/recharge', async (req, res) => {
 	const rechargeResults = await rechargeCredits(req.body);
 	res.status(rechargeResults.status).send(rechargeResults.message);
+});
+
+userRoute.get('/userDetails/:userID', async (req, res) => {
+	const userDetailsResponse = await getUser(req.params);
+	res.status(userDetailsResponse.status).send(userDetailsResponse.data);
 });
 
 module.exports = userRoute;
