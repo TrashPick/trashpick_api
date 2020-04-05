@@ -2,6 +2,26 @@ const User = require('../Models/User');
 const { getUserDataToken } = require('../Services/index');
 
 module.exports = {
+	getUser: async ({ userID }) => {
+		const user = await User.findOne({ userID: userID });
+
+		if (user !== null) {
+			return {
+				status: 200,
+				data: {
+					profileImage: user.profileImage,
+					fullName: user.lastname + ' ' + user.firstname,
+					mobileNumber: user.mobileNumber
+				}
+			};
+		} else {
+			return {
+				status: 404,
+				data: 'User not found'
+			};
+		}
+	},
+
 	rechargeCredits: async ({ amount, momo, token, credits }) => {
 		const { userID } = getUserDataToken(token);
 
