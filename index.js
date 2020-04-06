@@ -15,8 +15,12 @@ app.use(bodyParser.json());
 app.use(AuthRoute);
 app.use(PledgeRoute);
 
+const mongoLocal = 'mongodb://localhost:27017/Lionshare';
+const mongoUrl =
+	'mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/test?retryWrites=true&w=majority';
+// "LwAdUlakGh4A5Ijw"
 (async () => {
-	await mongoose.connect('mongodb://localhost:27017/Lionshare', {
+	await mongoose.connect(mongoUrl, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true
 	});
