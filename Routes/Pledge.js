@@ -15,6 +15,11 @@ pledgeRoute.get('/myPledges/:token', async (req, res) => {
 	res.send(mPledges);
 });
 
+pledgeRoute.get('/pledge/:id', async (req, res) => {
+	const pledge = await Pledge.getOnePledge(req.params);
+	res.send(pledge);
+});
+
 pledgeRoute.post('/me/matchPledge/:pledgeID', async (req, res) => {
 	const matchPledge = await Pledge.matchPledges({
 		pledgeID: req.params.pledgeID
