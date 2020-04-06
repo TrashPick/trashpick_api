@@ -2,6 +2,8 @@ const Pledge = require('../Models/Pledge');
 const User = require('../Models/User');
 const Match = require('../Models/Match');
 const { getUserDataToken } = require('../Services');
+const { sendSMS } = require('../Utils');
+const { getUser } = require('../Services/User');
 
 module.exports = {
 	myPledges: async ({ userID }) => {
@@ -120,6 +122,13 @@ module.exports = {
 				pledgeID: pledgeID
 			});
 
+			const user = await getUser({ userID: match.userID });
+			const to = await getUser({ userID: match.to });
+			await sendSMS({
+				phone: user.data.mobileNumber,
+				message: `You've been matched to make payment of Ghc ${match.amountToPay} to ${to.data.fullName}, ${to.data.mobileNumber}`
+			});
+
 			const cP = await Pledge.findOneAndUpdate(
 				{ _id: currentPledge._id },
 				{
@@ -199,6 +208,12 @@ module.exports = {
 				{ _id: match.userPledgeID },
 				{ fulfilled: true }
 			);
+
+			const user = await getUser({ userID: match.userID });
+			await sendSMS({
+				phone: '+233' + user.data.mobileNumber,
+				message: `Payment Confirmed, your pledge of Ghc ${match.amountToPay} has been fulfulled. You can manually search for matches for your Ghc ${pledge.expectedAmount}. Thanks for using Lionshare`
+			});
 		}
 
 		return acknowledge;
