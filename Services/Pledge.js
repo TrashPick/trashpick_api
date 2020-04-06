@@ -184,6 +184,23 @@ module.exports = {
 			}
 		);
 
+		let Pastpayable = await Match.find({
+			acknowledged: true,
+			userPledgeID: match.userPledgeID
+		});
+
+		let totalPayed = 0;
+		Pastpayable.forEach((e) => (totalPayed += e.amountPayed));
+
+		let pledge = await Pledge.findById(match.userPledgeID);
+
+		if (totalPayed === pledge.amount) {
+			await Pledge.findByIdAndUpdate(
+				{ _id: match.userPledgeID },
+				{ fulfilled: true }
+			);
+		}
+
 		return acknowledge;
 	}
 };
