@@ -50,9 +50,10 @@ module.exports = {
 		}
 	},
 
-	signin: async (phone, password) => {
+	signin: async ({ phone, password }) => {
 		// Check db for phone number;
 		let user = await User.findOne({ mobileNumber: phone });
+		//	console.log(user);
 		if (user !== null) {
 			//User is in Db
 			if (user.checkPassword(password)) {
@@ -64,7 +65,9 @@ module.exports = {
 					}
 				};
 			} else {
-				return { msg: { type: 'error', message: 'Invalid password' } };
+				return {
+					msg: { type: 'invalidPassword', message: 'Invalid password' }
+				};
 			}
 		} else {
 			return {
