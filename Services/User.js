@@ -1,5 +1,6 @@
 const User = require('../Models/User');
 const { getUserDataToken } = require('../Services/index');
+const { sendSMS, makePayment } = require('../Utils');
 
 module.exports = {
 	getUser: async ({ userID }) => {
@@ -28,16 +29,33 @@ module.exports = {
 		const currentAccount = await User.findOne({ userID: userID });
 		if (currentAccount !== null) {
 			try {
-				await User.findOneAndUpdate(
-					{ userID: userID },
-					{ credits: currentAccount.credits + credits }
-				);
+				const paymentResponse = await makePayment({
+					amount: amount,
+					phoneNumber: momo
+				});
 
-				return {
-					status: 200,
-					message: `Successfully Recharged ${amount}, current balance is ${currentAccount.credits +
-						credits}`
-				};
+				if (paymentResponse.code == 1) {
+					await User.findOneAndUpdate(
+						{ userID: userID },
+						{ credits: currentAccount.credits + credits }
+					);
+
+					await sendSMS({
+						phone: '+233' + currentAccount.mobileNumber,
+						message: `Your Lionshare account has been credited with ${credits} points`
+					});
+
+					return {
+						status: 200,
+						message: `Successfully Recharged ${amount}, current balance is ${currentAccount.credits +
+							credits}`
+					};
+				} else {
+					return {
+						status: 404,
+						message: e
+					};
+				}
 			} catch (e) {
 				return {
 					status: 404,
