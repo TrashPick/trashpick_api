@@ -56,8 +56,7 @@ module.exports = {
 		});
 
 		let PastTransactions = await Match.find({
-			userID: currentPledge.userID,
-			userPledgeID: pledgeID,
+			pledgeID: pledgeID,
 			acknowledged: true
 		});
 
@@ -66,11 +65,17 @@ module.exports = {
 			acknowledged: false
 		});
 
+		let Pastpayable = await Match.find({
+			acknowledged: true,
+			userPledgeID: pledgeID
+		});
+
 		return {
 			status: 200,
 			pending: Pending,
 			past: PastTransactions,
-			incoming: IncomingFunds
+			incoming: IncomingFunds,
+			payed: Pastpayable
 		};
 	},
 
@@ -173,8 +178,9 @@ module.exports = {
 		const acknowledge = await Match.findByIdAndUpdate(
 			{ _id: matchID },
 			{
+				amountToPay: match.amountToPay - amount,
 				amountPayed: amount,
-				acknowledged: amount + match.amountPayed === match.amountToPay
+				acknowledged: true
 			}
 		);
 
