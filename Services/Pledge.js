@@ -212,7 +212,7 @@ module.exports = {
 			const user = await getUser({ userID: match.userID });
 			await sendSMS({
 				phone: '+233' + user.data.mobileNumber,
-				message: `Payment Confirmed, your pledge of Ghc ${match.amountToPay} has been fulfulled. You can manually search for matches for your Ghc ${pledge.expectedAmount}. Thanks for using Lionshare`
+				message: `Payment Confirmed, your pledge of Ghc ${match.amountToPay} has been fulfilled. You can now manually search for matches for your Ghc ${pledge.expectedAmount}. Thanks for using Lionshare`
 			});
 		}
 
