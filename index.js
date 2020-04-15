@@ -1,11 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const app = express();
 
-const AuthRoute = require('./Routes/UserRoute');
-const PledgeRoute = require('./Routes/Pledge');
+const AuthRoute = require("./Routes/UserRoute");
 
 const PORT = process.env.PORT || 3030;
 
@@ -13,22 +12,21 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(AuthRoute);
-app.use(PledgeRoute);
 
-const mongoLocal = 'mongodb://localhost:27017/Lionshare';
+const mongoLocal = "mongodb://localhost:27017/Lionshare";
 const mongoUrl =
-	'mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/Lionshare?retryWrites=true&w=majority';
+  "mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/Lionshare?retryWrites=true&w=majority";
 // "LwAdUlakGh4A5Ijw"
 (async () => {
-	await mongoose.connect(mongoUrl, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true
-	});
-	console.log('Connected to Database Successfully');
+  await mongoose.connect(mongoLocal, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  console.log("Connected to Database Successfully");
 })();
 
 app.listen(PORT, () => {
-	console.log('Server started successfully');
+  console.log("Server started successfully");
 });
 
 // const mInterval = setInterval(async () => {

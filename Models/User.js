@@ -1,54 +1,42 @@
-const { model, Schema } = require('mongoose');
-const crypto = require('crypto');
-const { jwtSecret } = require('../Services/config');
-const jwt = require('jsonwebtoken');
+const { model, Schema } = require("mongoose");
+const crypto = require("crypto");
+const { jwtSecret } = require("../Services/config");
+const jwt = require("jsonwebtoken");
 
 const User = new Schema({
-	firstname: { type: String },
-	lastname: { type: String },
-	userID: { type: String, required: true, unique: true },
-	password: { hash: String, salt: String },
-	mobileNumber: { type: Number, required: true },
-	mobileNetwork: { type: String },
-	country: { type: String },
-	credits: { type: Number, default: 0.0 },
-	username: { type: String },
-	profileImage: { type: String },
-	fcmToken: { type: String }
+  mobileNumber: { type: Number, required: true },
+  name: { type: String },
+  region: { type: String },
+  email: { type: String },
+  userType: { type: String },
+  organisationEmail: { type: String, default: null },
 });
 
-User.methods.generateID = function(mobileNumber) {
-	const genID = `U${mobileNumber}`;
-	this.userID = genID;
+User.methods.hashPassword = function (password) {
+  this.password.salt = crypto.randomBytes(16).toString("hex");
+  this.password.hash = crypto
+    .pbkdf2Sync(password, this.password.salt, 1000, 512, "sha512")
+    .toString("hex");
 };
 
-User.methods.hashPassword = function(password) {
-	this.password.salt = crypto.randomBytes(16).toString('hex');
-	this.password.hash = crypto
-		.pbkdf2Sync(password, this.password.salt, 1000, 512, 'sha512')
-		.toString('hex');
+User.methods.checkPassword = function (password) {
+  let hash = crypto
+    .pbkdf2Sync(password, this.password.salt, 1000, 512, "sha512")
+    .toString("hex");
+  return hash === this.password.hash;
 };
 
-User.methods.checkPassword = function(password) {
-	let hash = crypto
-		.pbkdf2Sync(password, this.password.salt, 1000, 512, 'sha512')
-		.toString('hex');
-	return hash === this.password.hash;
+User.methods.createWebToken = function () {
+  return jwt.sign(
+    {
+      name: this.name,
+      mobileNumber: this.mobileNumber,
+      email: this.email,
+      userType: this.userType,
+      organisationEmail: organisationEmail,
+    },
+    jwtSecret
+  );
 };
 
-User.methods.createWebToken = function() {
-	return jwt.sign(
-		{
-			userID: this.userID,
-			mobileNumber: this.mobileNumber,
-			mobileNetwork: this.mobileNetwork,
-			country: this.country,
-			username: this.username,
-			profileImage: this.profileImage,
-			credits: this.credits
-		},
-		jwtSecret
-	);
-};
-
-module.exports = model('Users', User);
+module.exports = model("Users", User);
