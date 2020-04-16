@@ -2,17 +2,17 @@ const { Router } = require("express");
 const Auth = require("../Services/Auth");
 const { getUserDataToken } = require("../Services");
 const { rechargeCredits, getUser } = require("../Services/User");
-const { acknowledgePayment } = require("../Services/Pledge");
+//const { acknowledgePayment } = require("../Services/Pledge");
 
 const userRoute = Router();
 
 userRoute.post("/auth/newuser", async (req, res) => {
   const response = await Auth.signup(req.body);
-  // console.log(response);
-  if (response.msg.type === "success") {
-    res.send(response.msg.userData);
+
+  if (response !== "Already Exist") {
+    res.send(response);
   } else {
-    res.status(401).send(response.msg.message);
+    res.status(401).send(response);
   }
 });
 
@@ -27,13 +27,8 @@ userRoute.post("/auth/signin", async (req, res) => {
   }
 });
 
-userRoute.post("/pledge/acknowledge", async (req, res) => {
-  await acknowledgePayment(req.body);
-  res.send("acknowledged");
-});
-
-userRoute.post("/auth/me", async (req, res) => {
-  const userData = await Auth.getUserData(req.body.token);
+userRoute.get("/auth/me/userID", async (req, res) => {
+  const userData = await Auth.getUserData(req.params.userID);
   res.status(userData.status).send(userData.data);
 });
 
