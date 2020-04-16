@@ -18,7 +18,7 @@ const mongoUrl =
   "mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/BlackSanta?retryWrites=true&w=majority";
 // "LwAdUlakGh4A5Ijw"
 (async () => {
-  await mongoose.connect(mongoLocal, {
+  await mongoose.connect(mongoUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
