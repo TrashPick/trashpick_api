@@ -84,6 +84,13 @@ module.exports = {
       return "Successfull";
     }
   },
+
+  getDonations: async ({ userID }) => {
+    const Donations = await Donate.find({ user: userID }).sort({ date: -1 });
+
+    return Donations;
+  },
+
   rechargeCredits: async ({ amount, momo, token, credits }) => {
     const { userID } = getUserDataToken(token);
 
