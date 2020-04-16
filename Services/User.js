@@ -22,7 +22,15 @@ module.exports = {
     }
   },
 
-  donate: async ({ type, user, location, amount = 0 }) => {
+  donate: async ({
+    type,
+    user,
+    location,
+    amount = 0,
+    landmark,
+    mobileMoneyNetwork,
+    mobileNumber,
+  }) => {
     let reversedAddress;
     if (address === "--" || address === "-") {
       reversedAddress = await reverseGeocoding(location.lat, location.long);
@@ -32,9 +40,12 @@ module.exports = {
 
     const donation = new Donate({
       type,
+      mobileMoneyNetwork,
+      mobileNumber,
       address: reversedAddress,
       user,
       amount,
+      landmark,
       location: {
         type: "Point",
         coordinates: [location.long, location.lat],
@@ -42,6 +53,8 @@ module.exports = {
       donationDate: new Date().toLocaleString(),
       date: new Date().getTime(),
     });
+
+    console.log(donation);
   },
 
   rechargeCredits: async ({ amount, momo, token, credits }) => {
