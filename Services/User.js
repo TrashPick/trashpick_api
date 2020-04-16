@@ -1,7 +1,7 @@
 const User = require("../Models/User");
 const Donate = require("../Models/Donate");
 const { getUserDataToken } = require("../Services/index");
-const { sendSMS, makePayment } = require("../Utils");
+const { sendSMS, makePayment, reverseGeocoding } = require("../Utils");
 
 module.exports = {
   getUser: async ({ userID }) => {
@@ -30,9 +30,12 @@ module.exports = {
     landmark,
     mobileMoneyNetwork,
     mobileNumber,
+    address,
+    userNumber,
   }) => {
     let reversedAddress;
-    if (address === "--" || address === "-") {
+
+    if (address === undefined) {
       reversedAddress = await reverseGeocoding(location.lat, location.long);
     } else {
       reversedAddress = address;
@@ -46,6 +49,7 @@ module.exports = {
       user,
       amount,
       landmark,
+      userNumber,
       location: {
         type: "Point",
         coordinates: [location.long, location.lat],
@@ -54,9 +58,32 @@ module.exports = {
       date: new Date().getTime(),
     });
 
-    console.log(donation);
-  },
+    if (type == "money") {
+      const requestPayment = await makePayment({
+        amount: amount,
+        phoneNumber: mobileNumber,
+        network: mobileMoneyNetwork,
+      });
 
+      if (requestPayment.code === 1) {
+        await donation.save();
+        await sendSMS({
+          phone: "+233" + userNumber,
+          message:
+            "We have recieved your donation towards the Black Santa Covid-19 SOS project. You just saved someone's life. Thank you",
+        });
+        return "Successfull";
+      }
+    } else {
+      await donation.save();
+      await sendSMS({
+        phone: "+233" + userNumber,
+        message:
+          "We have received your request to donate toward the Black Santa Covid-19 SOS project. We'll assign our Delivery man for the package. Thank you",
+      });
+      return "Successfull";
+    }
+  },
   rechargeCredits: async ({ amount, momo, token, credits }) => {
     const { userID } = getUserDataToken(token);
 

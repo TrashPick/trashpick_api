@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const donate = new Schema({
-  type: { type: String, enum: ["food", "water", "cash"] },
+  type: { type: String, enum: ["food", "foodStuff", "money"] },
   user: { type: String },
   location: {
     type: {
@@ -20,6 +20,7 @@ const donate = new Schema({
   donationDate: { type: String },
   date: { type: Number },
   address: { type: String },
+  userNumber: { type: String },
 });
 
 donate.index({ geoLocation: "2dsphere" });

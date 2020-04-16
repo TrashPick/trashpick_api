@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const Auth = require("../Services/Auth");
 const { getUserDataToken } = require("../Services");
-const { rechargeCredits, getUser } = require("../Services/User");
+const { rechargeCredits, getUser, donate } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
 const userRoute = Router();
@@ -14,6 +14,13 @@ userRoute.post("/auth/newuser", async (req, res) => {
   } else {
     res.status(401).send(response);
   }
+});
+
+userRoute.post("/user/donate", async (req, res) => {
+  // console.log(req.body);
+  const response = await donate(req.body);
+
+  res.send("Successful");
 });
 
 userRoute.post("/auth/signin", async (req, res) => {

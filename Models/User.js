@@ -4,7 +4,7 @@ const { jwtSecret } = require("../Services/config");
 const jwt = require("jsonwebtoken");
 
 const User = new Schema({
-  mobileNumber: { type: String, required: true },
+  mobileNumber: { type: Number, required: true, unique: true },
   name: { type: String },
   region: { type: String },
   email: { type: String },
