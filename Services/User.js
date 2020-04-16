@@ -32,13 +32,18 @@ module.exports = {
     mobileNumber,
     address,
     userNumber,
+    region,
   }) => {
     let reversedAddress;
 
-    if (address === undefined) {
-      reversedAddress = await reverseGeocoding(location.lat, location.long);
-    } else {
-      reversedAddress = address;
+    try {
+      if (address === undefined) {
+        reversedAddress = await reverseGeocoding(location.lat, location.long);
+      } else {
+        reversedAddress = address;
+      }
+    } catch (e) {
+      reversedAddress = region;
     }
 
     const donation = new Donate({
