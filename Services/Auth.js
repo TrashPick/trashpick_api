@@ -8,7 +8,9 @@ module.exports = {
     region,
     email,
     userType,
-    organizationEmail,
+    donorType,
+    password = "",
+    clearance,
   }) => {
     let user = new User({
       mobileNumber,
@@ -16,24 +18,18 @@ module.exports = {
       region,
       email,
       userType,
-      organizationEmail,
+      donorType,
+      clearance,
     });
 
+    user.hashPassword(password);
     try {
       await user.save();
-      return {
-        msg: {
-          code: 200,
-          type: "success",
-          message: "User successfully registered",
-          userData: user,
-        },
-      };
+
+      return user;
     } catch (e) {
       if (e.code === 11000) {
-        return {
-          msg: { type: "error", code: 401, message: "Account already Exist" },
-        };
+        return "Already Exist";
       }
     }
   },
