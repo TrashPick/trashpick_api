@@ -13,9 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(AuthRoute);
 
-const mongoLocal = "mongodb://localhost:27017/Lionshare";
+const mongoLocal = "mongodb://localhost:27017/BlackSanta";
 const mongoUrl =
-  "mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/Lionshare?retryWrites=true&w=majority";
+  "mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/BlackSanta?retryWrites=true&w=majority";
 // "LwAdUlakGh4A5Ijw"
 (async () => {
   await mongoose.connect(mongoLocal, {
