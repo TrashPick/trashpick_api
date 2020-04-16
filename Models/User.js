@@ -4,12 +4,18 @@ const { jwtSecret } = require("../Services/config");
 const jwt = require("jsonwebtoken");
 
 const User = new Schema({
-  mobileNumber: { type: Number, required: true },
+  mobileNumber: { type: String, required: true },
   name: { type: String },
   region: { type: String },
   email: { type: String },
+  donorType: { type: String },
   userType: { type: String },
-  organisationEmail: { type: String, default: null },
+  password: { salt: { type: String }, hash: { type: String } },
+  clearance: {
+    type: String,
+    enum: ["user", "delivery", "admin"],
+    default: "user",
+  },
 });
 
 User.methods.hashPassword = function (password) {
