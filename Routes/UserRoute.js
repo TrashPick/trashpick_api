@@ -1,7 +1,12 @@
 const { Router } = require("express");
 const Auth = require("../Services/Auth");
 const { getUserDataToken } = require("../Services");
-const { rechargeCredits, getUser, donate } = require("../Services/User");
+const {
+  rechargeCredits,
+  getUser,
+  donate,
+  getDonations,
+} = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
 const userRoute = Router();
@@ -34,9 +39,18 @@ userRoute.post("/auth/signin", async (req, res) => {
   }
 });
 
-userRoute.get("/auth/me/userID", async (req, res) => {
+userRoute.get("/auth/me/:userID", async (req, res) => {
   const userData = await Auth.getUserData(req.params.userID);
+
   res.status(userData.status).send(userData.data);
+});
+
+userRoute.get("/me/donations/:userID", async (req, res) => {
+  const requestsAndDonations = await getDonations({
+    userID: req.params.userID,
+  });
+
+  res.send(requestsAndDonations);
 });
 
 userRoute.post("/me/recharge", async (req, res) => {
