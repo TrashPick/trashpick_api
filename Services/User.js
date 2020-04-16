@@ -57,7 +57,10 @@ module.exports = {
       userNumber,
       location: {
         type: "Point",
-        coordinates: [location.long, location.lat],
+        coordinates:
+          location.lat !== undefined || location.lat !== undefined
+            ? [location.long, location.lat]
+            : [0, 0],
       },
       donationDate: new Date().toLocaleString(),
       date: new Date().getTime(),
