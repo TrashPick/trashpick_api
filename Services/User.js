@@ -4,6 +4,11 @@ const Request = require("../Models/Request");
 const { getUserDataToken } = require("../Services/index");
 const { sendSMS, makePayment, reverseGeocoding } = require("../Utils");
 
+function mergeTwo(arr1, arr2) {
+  let result = [...arr1, ...arr2];
+  return result.sort((a, b) => a.date - b.date);
+}
+
 module.exports = {
   getUser: async ({ userID }) => {
     const user = await User.findOne({ _id: userID });
@@ -78,6 +83,44 @@ module.exports = {
     }
   },
 
+  getDonationsAndRequest: async ({ lat, long, maxDistance = 100000 }) => {
+    console.log(lat, long);
+    try {
+      const nearbyRequests = await Request.find({
+        delivered: false,
+        status: "pending",
+        location: {
+          $near: {
+            $geometry: { type: "Point", coordinates: [long, lat] },
+            $maxDistance: maxDistance,
+            $minDistance: 0,
+          },
+        },
+      })
+        .sort({ date: -1 })
+        .limit(10);
+
+      const nearbyDonations = await Donate.find({
+        pickedUp: false,
+        type: { $in: ["foodStuff", "food"] },
+        location: {
+          $near: {
+            $geometry: { type: "Point", coordinates: [long, lat] },
+            $maxDistance: maxDistance,
+            $minDistance: 0,
+          },
+        },
+      })
+        .sort({ date: -1 })
+        .limit(10);
+
+      const final = mergeTwo(nearbyRequests, nearbyDonations);
+      console.log(final);
+      return final;
+    } catch (e) {
+      console.log(e);
+    }
+  },
   donate: async ({
     type,
     user,
