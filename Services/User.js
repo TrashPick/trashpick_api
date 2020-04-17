@@ -1,5 +1,6 @@
 const User = require("../Models/User");
 const Donate = require("../Models/Donate");
+const Request = require("../Models/Request");
 const { getUserDataToken } = require("../Services/index");
 const { sendSMS, makePayment, reverseGeocoding } = require("../Utils");
 
@@ -19,6 +20,61 @@ module.exports = {
         status: 404,
         data: "User not found",
       };
+    }
+  },
+
+  Newrequest: async ({
+    mealType,
+    user,
+    location,
+    landmark,
+    address,
+    region,
+
+    additionalNote,
+    mobileNumber,
+  }) => {
+    let reversedAddress;
+
+    try {
+      if (address === undefined) {
+        reversedAddress = await reverseGeocoding(location.lat, location.long);
+      } else {
+        reversedAddress = address;
+      }
+    } catch (e) {
+      reversedAddress = region;
+    }
+
+    const request = new Request({
+      mealType,
+      user,
+      landmark,
+      additionalNote,
+      location: {
+        type: "Point",
+        coordinates:
+          location.lat !== undefined || location.lat !== undefined
+            ? [location.long, location.lat]
+            : [0, 0],
+      },
+
+      address: reversedAddress,
+      date: new Date().getTime(),
+      region,
+    });
+
+    console.log(request);
+
+    try {
+      await request.save();
+      await sendSMS({
+        phone: "+233" + mobileNumber,
+        message:
+          "Order has been received, The food will be dilivered to you shortly, Thank for using Black Santa, We care for you",
+      });
+    } catch (e) {
+      console.log(e);
     }
   },
 
@@ -53,6 +109,7 @@ module.exports = {
       address: reversedAddress,
       user,
       amount,
+      region,
       landmark,
       userNumber,
       location: {
@@ -97,6 +154,13 @@ module.exports = {
     const Donations = await Donate.find({ user: userID }).sort({ date: -1 });
 
     return Donations;
+  },
+
+  getMyRequests: async ({ userID }) => {
+    const Requests = await Request.find({ user: userID }).sort({
+      date: -1,
+    });
+    return Requests;
   },
 
   rechargeCredits: async ({ amount, momo, token, credits }) => {
