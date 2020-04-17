@@ -8,6 +8,7 @@ const {
   getDonations,
   Newrequest,
   getMyRequests,
+  getDonationsAndRequest,
 } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
@@ -51,6 +52,18 @@ userRoute.post("/auth/signin", async (req, res) => {
     res.status(401).send(response.msg.message);
   } else {
     res.status(404).send(response.msg.message);
+  }
+});
+
+userRoute.get("/requestAndDonations/:lat/:long", async (req, res) => {
+  try {
+    const requestAndDonations = await getDonationsAndRequest({
+      lat: req.params.lat,
+      long: req.params.long,
+    });
+    res.send(requestAndDonations);
+  } catch (e) {
+    res.status(404).send([]);
   }
 });
 
