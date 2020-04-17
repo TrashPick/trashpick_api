@@ -21,6 +21,7 @@ const donate = new Schema({
   date: { type: Number },
   address: { type: String },
   userNumber: { type: String },
+  region: { type: String },
 });
 
 donate.index({ geoLocation: "2dsphere" });
