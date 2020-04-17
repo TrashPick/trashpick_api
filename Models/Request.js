@@ -28,6 +28,6 @@ const Request = new Schema({
   delivery: {},
 });
 
-Request.index({ geoLocation: "2dsphere" });
+Request.index({ location: "2dsphere" });
 
 module.exports = model("Requests", Request);
