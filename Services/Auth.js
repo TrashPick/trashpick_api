@@ -11,6 +11,7 @@ module.exports = {
     donorType,
     password = "",
     clearance,
+    organization,
   }) => {
     let user = new User({
       mobileNumber,
@@ -20,6 +21,7 @@ module.exports = {
       userType,
       donorType,
       clearance,
+      organization,
     });
 
     user.hashPassword(password);
