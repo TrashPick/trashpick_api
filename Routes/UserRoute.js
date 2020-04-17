@@ -6,6 +6,8 @@ const {
   getUser,
   donate,
   getDonations,
+  Newrequest,
+  getMyRequests,
 } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
@@ -26,6 +28,19 @@ userRoute.post("/user/donate", async (req, res) => {
   const response = await donate(req.body);
 
   res.send("Successful");
+});
+
+userRoute.post("/user/newRequest", async (req, res) => {
+  const request = await Newrequest(req.body);
+  res.send("Done");
+});
+
+userRoute.get("/me/myRequests/:userID", async (req, res) => {
+  const mRequests = await getMyRequests({
+    userID: req.params.userID,
+  });
+
+  res.send(mRequests);
 });
 
 userRoute.post("/auth/signin", async (req, res) => {
