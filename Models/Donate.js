@@ -22,8 +22,9 @@ const donate = new Schema({
   address: { type: String },
   userNumber: { type: String },
   region: { type: String },
+  status: { type: String, enum: ["pending", "confirmed"], default: "pending" },
 });
 
-donate.index({ geoLocation: "2dsphere" });
+donate.index({ location: "2dsphere" });
 
 module.exports = model("Donations", donate);
