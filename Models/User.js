@@ -9,6 +9,7 @@ const User = new Schema({
   region: { type: String },
   email: { type: String },
   donorType: { type: String },
+  organization: { type: String },
   userType: { type: String },
   password: { salt: { type: String }, hash: { type: String } },
   clearance: {
