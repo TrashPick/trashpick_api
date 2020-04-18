@@ -76,7 +76,7 @@ module.exports = {
       await sendSMS({
         phone: "+233" + mobileNumber,
         message:
-          "Order has been received, The food will be delivered to you shortly, Thank for using Black Santa, We care for you",
+          "Thank you, your SOS request has been received. We will work on it and comunicate when request is confirmed. Black Santa, we dey 4 U",
       });
     } catch (e) {
       console.log(e);
