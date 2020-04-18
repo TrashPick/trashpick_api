@@ -22,7 +22,11 @@ const donate = new Schema({
   address: { type: String },
   userNumber: { type: String },
   region: { type: String },
-  status: { type: String, enum: ["pending", "confirmed"], default: "pending" },
+  status: {
+    type: String,
+    enum: ["pending", "enroute", "confirmed"],
+    default: "pending",
+  },
 });
 
 donate.index({ location: "2dsphere" });
