@@ -76,7 +76,7 @@ module.exports = {
       await sendSMS({
         phone: "+233" + mobileNumber,
         message:
-          "Thank you, your SOS request has been received. We will work on it and comunicate when request is confirmed. Black Santa, we dey 4 U",
+          "Thank you, your SOS request has been received. We will work on it and communicate when request is confirmed. Black Santa, we dey 4 U",
       });
     } catch (e) {
       console.log(e);
