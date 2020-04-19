@@ -14,6 +14,7 @@ const Request = new Schema({
   },
   delivered: { type: Boolean, default: false },
   deliveryDate: { type: String },
+  courier: {},
   user: { type: String },
   mealType: { type: String, enum: ["breakfast", "lunch", "supper"] },
   status: {
@@ -25,7 +26,6 @@ const Request = new Schema({
   landmark: { type: String },
   region: { type: String },
   userNumber: { type: String },
-  delivery: {},
 });
 
 Request.index({ location: "2dsphere" });
