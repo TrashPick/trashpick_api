@@ -66,20 +66,17 @@ module.exports = {
     }
   },
 
-  getUserData: async (token) => {
-    const userDateFromToken = getUserDataToken(token);
+  getUserData: async (userId) => {
     const userDatafromDatabase = await User.findOne({
-      userID: userDateFromToken.userID,
+      _id: userId,
     });
 
     if (userDatafromDatabase !== null) {
       return {
         status: 200,
         data: {
-          ...userDateFromToken,
-          credits: userDatafromDatabase.credits,
-          firstname: userDatafromDatabase.firstname,
-          lastname: userDatafromDatabase.lastname,
+          name: userDatafromDatabase.name,
+          mobileNumber: userDatafromDatabase.mobileNumber,
         },
       };
     } else {
