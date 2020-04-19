@@ -69,7 +69,7 @@ module.exports = {
       region,
     });
 
-    console.log(request);
+    // console.log(request);
 
     try {
       await request.save();
@@ -80,6 +80,35 @@ module.exports = {
       });
     } catch (e) {
       console.log(e);
+    }
+  },
+
+  confirmRequestDelivery: async ({ id, courierID }) => {
+    try {
+      const request = await Request.findById(id);
+
+      const courier = await User.findById(courierID);
+      const user = await User.findById(request.user);
+
+      const donationUpdate = await Request.findOneAndUpdate(
+        { _id: id },
+        {
+          status: "enroute",
+          courier: { name: courier.name, mobileNumber: courier.mobileNumber },
+        }
+      );
+
+      await sendSMS({
+        phone: user.mobileNumber,
+        message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. Thanks for using Black Santa`,
+      });
+
+      const finalRequest = await Request.findById(id);
+
+      return { data: finalRequest, status: 200 };
+    } catch (e) {
+      console.log(e);
+      return { data: "null", status: 404 };
     }
   },
 
@@ -115,7 +144,7 @@ module.exports = {
         .limit(10);
 
       const final = mergeTwo(nearbyRequests, nearbyDonations);
-      console.log(final);
+      //console.log(final);
       return final;
     } catch (e) {
       console.log(e);
