@@ -19,6 +19,7 @@ const donate = new Schema({
   pickedUpDate: { type: String },
   donationDate: { type: String },
   date: { type: Number },
+  courier: {},
   address: { type: String },
   userNumber: { type: String },
   region: { type: String },
