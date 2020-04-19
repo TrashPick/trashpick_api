@@ -9,6 +9,7 @@ const {
   Newrequest,
   getMyRequests,
   getDonationsAndRequest,
+  confirmRequestDelivery,
 } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
@@ -54,6 +55,17 @@ userRoute.post("/auth/signin", async (req, res) => {
     res.status(404).send(response.msg.message);
   }
 });
+
+userRoute.get(
+  "/donation/confirmForDelivery/:id/:courierID",
+  async (req, res) => {
+    console.log(req.params);
+    const result = await confirmRequestDelivery(req.params);
+    res
+      .status(result.status)
+      .send(result.status === 200 ? result.data : "Error");
+  }
+);
 
 userRoute.get("/requestAndDonations/:lat/:long", async (req, res) => {
   try {
