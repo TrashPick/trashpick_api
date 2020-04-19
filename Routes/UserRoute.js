@@ -59,7 +59,6 @@ userRoute.post("/auth/signin", async (req, res) => {
 userRoute.get(
   "/donation/confirmForDelivery/:id/:courierID",
   async (req, res) => {
-    console.log(req.params);
     const result = await confirmRequestDelivery(req.params);
     res
       .status(result.status)

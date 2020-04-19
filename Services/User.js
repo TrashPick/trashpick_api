@@ -113,7 +113,6 @@ module.exports = {
   },
 
   getDonationsAndRequest: async ({ lat, long, maxDistance = 100000 }) => {
-    console.log(lat, long);
     try {
       const nearbyRequests = await Request.find({
         delivered: false,
