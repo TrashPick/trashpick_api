@@ -10,6 +10,8 @@ const {
   getMyRequests,
   getDonationsAndRequest,
   confirmRequestDelivery,
+  confirmItemDelivered,
+  confirmDonationPickup,
 } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
@@ -65,6 +67,26 @@ userRoute.get(
       .send(result.status === 200 ? result.data : "Error");
   }
 );
+
+userRoute.get(
+  "/donation/confirmDonationPickup/:id/:courierID",
+  async (req, res) => {
+    const result = await confirmDonationPickup(req.params);
+    res
+      .status(result.status)
+      .send(result.status === 200 ? result.data : "Error");
+  }
+);
+
+userRoute.get("/donation/confirmDelivery/:id", async (req, res) => {
+  const results = await confirmItemDelivered(req.params);
+  res.status(result.status).send(result.status === 200 ? "delivered" : "Error");
+});
+
+userRoute.get("/donation/confirmPickup/:id", async (req, res) => {
+  const results = await confirmItemDelivered(req.params);
+  res.status(result.status).send(result.status === 200 ? "pickedup" : "Error");
+});
 
 userRoute.get("/requestAndDonations/:lat/:long", async (req, res) => {
   try {
