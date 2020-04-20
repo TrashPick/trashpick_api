@@ -83,6 +83,42 @@ module.exports = {
     }
   },
 
+  confirmItemDelivered: async ({ id }) => {
+    try {
+      await Request.findOneAndUpdate(
+        { _id: id },
+        {
+          status: "delivered",
+          delivered: true,
+          deliveryDate: new Date().toLocaleString(),
+        }
+      );
+
+      return 200;
+    } catch (e) {
+      console.log(e);
+      return { status: 404 };
+    }
+  },
+
+  confirmPickupDonation: async ({ id }) => {
+    try {
+      await Donate.findOneAndUpdate(
+        { _id: id },
+        {
+          status: "confirmed",
+          pickedUpDate: new Date().toLocaleString(),
+          pickedUp: true,
+        }
+      );
+
+      return 200;
+    } catch (e) {
+      console.log(e);
+      return { status: 404 };
+    }
+  },
+
   confirmRequestDelivery: async ({ id, courierID }) => {
     try {
       const request = await Request.findById(id);
@@ -100,10 +136,39 @@ module.exports = {
 
       await sendSMS({
         phone: user.mobileNumber,
-        message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. Thanks for using Black Santa`,
+        message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. We are glad you are able to help. Black Santa we dey 4 you`,
       });
 
       const finalRequest = await Request.findById(id);
+
+      return { data: finalRequest, status: 200 };
+    } catch (e) {
+      console.log(e);
+      return { data: "null", status: 404 };
+    }
+  },
+
+  confirmDonationPickup: async ({ id, courierID }) => {
+    try {
+      const request = await Donate.findById(id);
+
+      const courier = await User.findById(courierID);
+      const user = await User.findById(request.user);
+
+      const donationUpdate = await Donate.findOneAndUpdate(
+        { _id: id },
+        {
+          status: "enroute",
+          courier: { name: courier.name, mobileNumber: courier.mobileNumber },
+        }
+      );
+
+      await sendSMS({
+        phone: user.mobileNumber,
+        message: `Your donation pickup has been confirmed ${courier.name} (0${courier.mobileNumber}) has been assigned to pickup your donation for delivery. We are glad you are able to help feed the need. Black Santa we dey 4 u`,
+      });
+
+      const finalRequest = await Donate.findById(id);
 
       return { data: finalRequest, status: 200 };
     } catch (e) {
