@@ -135,10 +135,10 @@ module.exports = {
         }
       );
 
-      // await sendSMS({
-      //   phone: user.mobileNumber,
-      //   message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. We are glad we are able to help. Black Santa we dey 4 you`,
-      // });
+      await sendSMS({
+        phone: user.mobileNumber,
+        message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. We are glad we are able to help. Black Santa we dey 4 you`,
+      });
 
       const finalRequest = await Request.findById(id);
 
@@ -170,6 +170,8 @@ module.exports = {
       });
 
       const finalRequest = await Donate.findById(id);
+
+      // console.log({ finalRequest });
 
       return { data: finalRequest, status: 200 };
     } catch (e) {
