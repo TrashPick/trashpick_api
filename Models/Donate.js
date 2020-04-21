@@ -15,6 +15,7 @@ const donate = new Schema({
   mobileMoneyNetwork: { type: String },
   mobileNumber: { type: String },
   amount: { type: Number },
+  landmark: { type: String },
   pickedUp: { type: Boolean, default: false },
   pickedUpDate: { type: String },
   donationDate: { type: String },
