@@ -14,7 +14,7 @@ const Request = new Schema({
   },
   delivered: { type: Boolean, default: false },
   deliveryDate: { type: String },
-  courier: {},
+  courier: { type: String },
   user: { type: String },
   mealType: { type: String, enum: ["breakfast", "lunch", "supper"] },
   status: {
