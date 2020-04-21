@@ -12,6 +12,7 @@ const {
   confirmRequestDelivery,
   confirmItemDelivered,
   confirmDonationPickup,
+  getCourierRequestsAndDonationList,
 } = require("../Services/User");
 //const { acknowledgePayment } = require("../Services/Pledge");
 
@@ -50,7 +51,7 @@ userRoute.get("/me/myRequests/:userID", async (req, res) => {
 userRoute.post("/auth/signin", async (req, res) => {
   const response = await Auth.signin(req.body);
   if (response.msg.type === "success") {
-    res.send(response.msg.data);
+    res.send(response.msg.user);
   } else if (response.msg.type === "invalidPassword") {
     res.status(401).send(response.msg.message);
   } else {
@@ -86,6 +87,12 @@ userRoute.get("/donation/confirmDelivery/:id", async (req, res) => {
 userRoute.get("/donation/confirmPickup/:id", async (req, res) => {
   const results = await confirmItemDelivered(req.params);
   res.status(result.status).send(result.status === 200 ? "pickedup" : "Error");
+});
+
+userRoute.get("/courier/job/:id", async (req, res) => {
+  // console.log(req.params);
+  const joblist = await getCourierRequestsAndDonationList(req.params);
+  res.send(joblist);
 });
 
 userRoute.get("/requestAndDonations/:lat/:long", async (req, res) => {
