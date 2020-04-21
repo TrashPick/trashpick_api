@@ -36,9 +36,10 @@ module.exports = {
     }
   },
 
-  signin: async ({ phone, password, type }) => {
+  signin: async ({ mobileNumber, password, type }) => {
     // Check db for phone number;
-    let user = await User.findOne({ mobileNumber: phone });
+
+    let user = await User.findOne({ mobileNumber: mobileNumber });
     //	console.log(user);
     if (user !== null) {
       //User is in Db
@@ -48,6 +49,7 @@ module.exports = {
             msg: { type: "error", message: "Invalid User type" },
           };
         }
+
         return {
           msg: {
             type: "success",
