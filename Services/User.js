@@ -4,9 +4,9 @@ const Request = require("../Models/Request");
 const { getUserDataToken } = require("../Services/index");
 const { sendSMS, makePayment, reverseGeocoding } = require("../Utils");
 
-function mergeTwo(arr1, arr2) {
+function mergeTwo(arr1, arr2, sorted = true) {
   let result = [...arr1, ...arr2];
-  return result.sort((a, b) => a.date - b.date);
+  return result.sort((a, b) => (sorted ? a.date - b.date : a.date > b.date));
 }
 
 module.exports = {
@@ -124,20 +124,21 @@ module.exports = {
       const request = await Request.findById(id);
 
       const courier = await User.findById(courierID);
+
       const user = await User.findById(request.user);
 
       const donationUpdate = await Request.findOneAndUpdate(
         { _id: id },
         {
           status: "enroute",
-          courier: { name: courier.name, mobileNumber: courier.mobileNumber },
+          courier: courier._id,
         }
       );
 
-      await sendSMS({
-        phone: user.mobileNumber,
-        message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. We are glad you are able to help. Black Santa we dey 4 you`,
-      });
+      // await sendSMS({
+      //   phone: user.mobileNumber,
+      //   message: `Your recent SOS request has been confirmed for Delivery, ${courier.name} (0${courier.mobileNumber}) has been assigned to deliver your request. We are glad we are able to help. Black Santa we dey 4 you`,
+      // });
 
       const finalRequest = await Request.findById(id);
 
@@ -159,7 +160,7 @@ module.exports = {
         { _id: id },
         {
           status: "enroute",
-          courier: { name: courier.name, mobileNumber: courier.mobileNumber },
+          courier: courier._id,
         }
       );
 
@@ -175,6 +176,20 @@ module.exports = {
       console.log(e);
       return { data: "null", status: 404 };
     }
+  },
+
+  getCourierRequestsAndDonationList: async ({ id }) => {
+    const requests = await Request.find({
+      courier: id,
+    });
+    const donations = await Donate.find({
+      courier: id,
+    });
+
+    const finalList = mergeTwo(requests, donations, false);
+
+    console.log({ requests, donations });
+    return finalList;
   },
 
   getDonationsAndRequest: async ({ lat, long, maxDistance = 100000 }) => {
