@@ -188,7 +188,7 @@ module.exports = {
 
     const finalList = mergeTwo(requests, donations, false);
 
-    console.log({ requests, donations });
+    //console.log({ requests, donations });
     return finalList;
   },
 
