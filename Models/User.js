@@ -7,7 +7,7 @@ const User = new Schema({
   mobileNumber: { type: Number, required: true, unique: true },
   name: { type: String },
   region: { type: String },
-  email: { type: String },
+  email: { type: String, unique: true },
   donorType: { type: String },
   organization: { type: String },
   userType: { type: String },
