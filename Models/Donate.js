@@ -1,7 +1,10 @@
 const { Schema, model } = require("mongoose");
 
 const donate = new Schema({
-  type: { type: String, enum: ["food", "foodStuff", "money"] },
+  type: {
+    type: String,
+    enum: ["food", "foodStuff", "money", "clothing", "educational"],
+  },
   user: { type: String },
   location: {
     type: {
@@ -14,6 +17,8 @@ const donate = new Schema({
   },
   mobileMoneyNetwork: { type: String },
   mobileNumber: { type: String },
+  comment: { type: String },
+  clothingType: { type: String, enum: ["new", "old"] },
   amount: { type: Number },
   landmark: { type: String },
   pickedUp: { type: Boolean, default: false },
