@@ -231,6 +231,7 @@ module.exports = {
       console.log(e);
     }
   },
+
   donate: async ({
     type,
     user,
@@ -239,6 +240,8 @@ module.exports = {
     landmark,
     mobileMoneyNetwork,
     mobileNumber,
+    clothingType,
+    comment,
     address,
     userNumber,
     region,
@@ -262,6 +265,8 @@ module.exports = {
       address: reversedAddress,
       user,
       amount,
+      comment,
+      clothingType,
       region,
       landmark,
       userNumber,
