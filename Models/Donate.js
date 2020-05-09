@@ -19,6 +19,7 @@ const donate = new Schema({
   mobileNumber: { type: String },
   comment: { type: String },
   clothingType: { type: String, enum: ["new", "old"] },
+  educationType: { type: String },
   amount: { type: Number },
   landmark: { type: String },
   pickedUp: { type: Boolean, default: false },
