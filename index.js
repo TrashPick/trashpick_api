@@ -5,6 +5,7 @@ const cors = require("cors");
 const app = express();
 
 const AuthRoute = require("./Routes/UserRoute");
+const AdminRoute = require("./Routes/AdminRoute");
 
 const PORT = process.env.PORT || 3030;
 
@@ -12,13 +13,14 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(AuthRoute);
+app.use(AdminRoute);
 
 const mongoLocal = "mongodb://localhost:27017/BlackSanta";
 const mongoUrl =
   "mongodb+srv://lionshare:LwAdUlakGh4A5Ijw@blogsandservices-zehed.mongodb.net/BlackSanta?retryWrites=true&w=majority";
 // "LwAdUlakGh4A5Ijw"
 (async () => {
-  await mongoose.connect(mongoUrl, {
+  await mongoose.connect(mongoLocal, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
