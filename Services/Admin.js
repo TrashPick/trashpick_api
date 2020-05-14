@@ -36,7 +36,7 @@ module.exports = {
       });
       try {
         const v = await voucher.save();
-        console.log(v);
+        // console.log(v);
       } catch (e) {
         console.log(e);
         continue;
