@@ -40,7 +40,7 @@ module.exports = {
     // Check db for phone number;
 
     let user = await User.findOne({ mobileNumber: mobileNumber });
-    //	console.log(user);
+
     if (user !== null) {
       //User is in Db
       if (user.checkPassword(password)) {
