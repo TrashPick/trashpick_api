@@ -50,6 +50,7 @@ userRoute.get("/me/myRequests/:userID", async (req, res) => {
 
 userRoute.post("/auth/signin", async (req, res) => {
   const response = await Auth.signin(req.body);
+
   if (response.msg.type === "success") {
     res.send(response.msg.user);
   } else if (response.msg.type === "invalidPassword") {
