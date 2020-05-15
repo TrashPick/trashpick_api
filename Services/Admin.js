@@ -1,6 +1,7 @@
 const Donate = require("../Models/Donate");
 const Request = require("../Models/Request");
 const Voucher = require("../Models/Voucher");
+const Gallery = require("../Models/Gallery");
 
 module.exports = {
   getDonations: async () => {
@@ -49,6 +50,24 @@ module.exports = {
   getVouchers: async () => {
     const vouchers = await Voucher.find().sort({ dateCreated: -1 });
     return vouchers;
+  },
+
+  addImage: async ({ imgUrl, description, title }) => {
+    const gallery = new Gallery({
+      imgUrl,
+      description,
+      title,
+    });
+
+    return await gallery.save();
+  },
+
+  getGalleryImages: async () => {
+    return await Gallery.find();
+  },
+
+  deleteGalleryImage: async (id) => {
+    return Gallery.findOneAndDelete({ _id: id });
   },
 };
 
