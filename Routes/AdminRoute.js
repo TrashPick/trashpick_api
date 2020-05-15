@@ -28,4 +28,19 @@ adminRoute.get("/admin/vouchers", async (req, res) => {
   res.send(vouchersResult);
 });
 
+adminRoute.post("/admin/addGallery", async (req, res) => {
+  const galleryResult = await AdminServices.addImage(req.body);
+  res.send(galleryResult);
+});
+
+adminRoute.get("/admin/gallery", async (req, res) => {
+  const gallery = await AdminServices.getGalleryImages();
+  res.send(gallery);
+});
+
+adminRoute.get("/admin/gallery/delete/:id", async (req, res) => {
+  await AdminServices.deleteGalleryImage(req.params.id);
+  res.send("deleted");
+});
+
 module.exports = adminRoute;
