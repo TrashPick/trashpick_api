@@ -3,7 +3,7 @@ const { Schema, model } = require("mongoose");
 const donate = new Schema({
   type: {
     type: String,
-    enum: ["food", "foodStuff", "money", "clothing", "educational"],
+    enum: ["food", "foodStuff", "money", "clothing", "educational", "voucher"],
   },
   user: { type: String },
   location: {
@@ -29,6 +29,7 @@ const donate = new Schema({
   courier: { type: String },
   address: { type: String },
   userNumber: { type: String },
+  voucherSerial: { type: Number },
   region: { type: String },
   status: {
     type: String,

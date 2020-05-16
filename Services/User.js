@@ -246,6 +246,7 @@ module.exports = {
     address,
     userNumber,
     region,
+    voucherSerial,
   }) => {
     let reversedAddress;
 
@@ -299,6 +300,24 @@ module.exports = {
         });
         return "Successfull";
       }
+    } else if ("voucher") {
+      const donation = new Donate({
+        amount,
+        voucherSerial,
+        user,
+        type,
+        userNumber,
+        location: { lat: 0, long: 0 },
+      });
+
+      await sendSMS({
+        phone: "+233" + userNumber,
+        message:
+          "We have recieved your donation towards the Black Santa Covid-19 SOS project. You just saved someone's life. Thank you",
+      });
+
+      await donation.save();
+      return "Successfull";
     } else {
       await donation.save();
       await sendSMS({

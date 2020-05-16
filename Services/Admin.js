@@ -2,6 +2,9 @@ const Donate = require("../Models/Donate");
 const Request = require("../Models/Request");
 const Voucher = require("../Models/Voucher");
 const Gallery = require("../Models/Gallery");
+const User = require("../Models/User");
+
+const { donate } = require("../Services/User");
 
 module.exports = {
   getDonations: async () => {
@@ -24,6 +27,37 @@ module.exports = {
     });
 
     return await voucher.save();
+  },
+
+  initializeVoucher: async ({ voucherCode, user }) => {
+    const voucher = await Voucher.findOne({ voucherCode: voucherCode });
+    // console.log(voucher);
+    if (voucher == null) {
+      return {
+        status: 404,
+      };
+    } else if (voucher.initialized) {
+      return {
+        status: 401,
+      };
+    } else {
+      await await Voucher.findOneAndUpdate(
+        { voucherCode: voucherCode },
+        { initialized: true, dateInitialized: new Date().getTime(), user: user }
+      );
+
+      const uFind = await User.findById(user);
+
+      await donate({
+        type: "voucher",
+        amount: voucher.amount,
+        voucherSerial: voucher.serial,
+        userNumber: uFind.mobileNumber,
+        user: user,
+        location: { lat: 0, long: 0 },
+      });
+      return { status: 200 };
+    }
   },
 
   generateVoucher: async ({ amount, quatity, batchID = generate(5) }) => {

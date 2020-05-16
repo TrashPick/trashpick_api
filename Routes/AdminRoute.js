@@ -43,4 +43,9 @@ adminRoute.get("/admin/gallery/delete/:id", async (req, res) => {
   res.send("deleted");
 });
 
+adminRoute.post("/admin/voucher/initialised", async (req, res) => {
+  const vInit = await AdminServices.initializeVoucher(req.body);
+  res.status(vInit.status).send("Done");
+});
+
 module.exports = adminRoute;
