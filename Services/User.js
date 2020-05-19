@@ -212,6 +212,7 @@ module.exports = {
 
       const nearbyDonations = await Donate.find({
         pickedUp: false,
+        status: "pending",
         type: { $in: ["foodStuff", "food"] },
         location: {
           $near: {
