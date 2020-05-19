@@ -285,7 +285,12 @@ module.exports = {
       date: new Date().getTime(),
     });
 
-    if (type == "money") {
+    console.log(type);
+    if (type === "foodStuff" || type === "clothing" || type === "educational") {
+      const don = await donation.save();
+      console.log("Saved", don);
+      return "Success";
+    } else if (type === "money") {
       const requestPayment = await makePayment({
         amount: amount,
         phoneNumber: mobileNumber,
@@ -308,6 +313,7 @@ module.exports = {
         user,
         type,
         userNumber,
+        date: new Date().getTime(),
         location: { lat: 0, long: 0 },
       });
 
@@ -320,7 +326,10 @@ module.exports = {
       await donation.save();
       return "Successfull";
     } else {
-      await donation.save();
+      console.log("heyyy");
+      const donaa = await donation.save();
+
+      console.log(donaa);
       await sendSMS({
         phone: "+233" + userNumber,
         message:
