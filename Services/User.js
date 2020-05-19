@@ -288,7 +288,11 @@ module.exports = {
     console.log(type);
     if (type === "foodStuff" || type === "clothing" || type === "educational") {
       const don = await donation.save();
-      console.log("Saved", don);
+      await sendSMS({
+        phone: "+233" + userNumber,
+        message:
+          "We have received your request to donate toward the Black Santa Covid-19 SOS project. We'll assign our Delivery man for the package. Thank you",
+      });
       return "Success";
     } else if (type === "money") {
       const requestPayment = await makePayment({
@@ -319,17 +323,16 @@ module.exports = {
 
       await sendSMS({
         phone: "+233" + userNumber,
-        message:
-          "We have recieved your donation towards the Black Santa Covid-19 SOS project. You just saved someone's life. Thank you",
+        message: `We have recieved your donation of Ghc ${amount.toFixed(
+          2
+        )} towards the Black Santa Covid-19 SOS project. You just saved someone's life. Thank you`,
       });
 
       await donation.save();
       return "Successfull";
     } else {
       console.log("heyyy");
-      const donaa = await donation.save();
 
-      console.log(donaa);
       await sendSMS({
         phone: "+233" + userNumber,
         message:
