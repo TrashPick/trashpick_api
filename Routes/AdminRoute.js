@@ -43,6 +43,36 @@ adminRoute.get("/admin/gallery/delete/:id", async (req, res) => {
   res.send("deleted");
 });
 
+adminRoute.post("/admin/addEvent", async (req, res) => {
+  const galleryResult = await AdminServices.addEvent(req.body);
+  res.send(galleryResult);
+});
+
+adminRoute.get("/admin/events", async (req, res) => {
+  const gallery = await AdminServices.getEvents();
+  res.send(gallery);
+});
+
+adminRoute.get("/admin/event/delete/:id", async (req, res) => {
+  await AdminServices.deleteEvent(req.params.id);
+  res.send("deleted");
+});
+
+adminRoute.post("/admin/addSponsor", async (req, res) => {
+  const galleryResult = await AdminServices.addSponsor(req.body);
+  res.send(galleryResult);
+});
+
+adminRoute.get("/admin/sponsors", async (req, res) => {
+  const gallery = await AdminServices.getSponsors();
+  res.send(gallery);
+});
+
+adminRoute.get("/admin/sponsor/delete/:id", async (req, res) => {
+  await AdminServices.deleteSponsor(req.params.id);
+  res.send("deleted");
+});
+
 adminRoute.post("/admin/voucher/initialised", async (req, res) => {
   const vInit = await AdminServices.initializeVoucher(req.body);
   res.status(vInit.status).send("Done");
