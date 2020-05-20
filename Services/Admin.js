@@ -3,6 +3,8 @@ const Request = require("../Models/Request");
 const Voucher = require("../Models/Voucher");
 const Gallery = require("../Models/Gallery");
 const User = require("../Models/User");
+const Events = require("../Models/Event");
+const Sponsor = require("../Models/Sponsor");
 
 const { donate } = require("../Services/User");
 
@@ -102,6 +104,42 @@ module.exports = {
 
   deleteGalleryImage: async (id) => {
     return Gallery.findOneAndDelete({ _id: id });
+  },
+
+  addEvent: async ({ imgUrl, description, title }) => {
+    const event = new Events({
+      imgUrl,
+      description,
+      title,
+    });
+
+    return await event.save();
+  },
+
+  getEvents: async () => {
+    return await Events.find();
+  },
+
+  deleteEvent: async (id) => {
+    return Events.findOneAndDelete({ _id: id });
+  },
+
+  addSponsor: async ({ imgUrl, url, name }) => {
+    const sponsor = new Sponsor({
+      imgUrl,
+      url,
+      name,
+    });
+
+    return await sponsor.save();
+  },
+
+  getSponsors: async () => {
+    return await Sponsor.find();
+  },
+
+  deleteSponsor: async (id) => {
+    return Sponsor.findOneAndDelete({ _id: id });
   },
 };
 
