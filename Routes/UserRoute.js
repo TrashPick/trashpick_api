@@ -85,7 +85,7 @@ userRoute.get(
 userRoute.get("/donation/confirmDelivery/:id", async (req, res) => {
   console.log("hi");
   const result = await confirmItemDelivered(req.params);
-  res.status("delivered");
+  res.send("delivered");
 });
 
 userRoute.get("/donation/confirmPickup/:id", async (req, res) => {
