@@ -90,7 +90,7 @@ module.exports = {
         {
           status: "delivered",
           delivered: true,
-          deliveryDate: new Date().toLocaleString(),
+          deliveryDate: new Date().getTime(),
         }
       );
 
