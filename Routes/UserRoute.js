@@ -11,6 +11,7 @@ const {
   getDonationsAndRequest,
   confirmRequestDelivery,
   confirmItemDelivered,
+  confirmPickupDonation,
   confirmDonationPickup,
   getCourierRequestsAndDonationList,
 } = require("../Services/User");
@@ -74,6 +75,7 @@ userRoute.get(
   "/donation/confirmDonationPickup/:id/:courierID",
   async (req, res) => {
     const result = await confirmDonationPickup(req.params);
+    //console.log(result);
     res
       .status(result.status)
       .send(result.status === 200 ? result.data : "Error");
@@ -81,12 +83,13 @@ userRoute.get(
 );
 
 userRoute.get("/donation/confirmDelivery/:id", async (req, res) => {
-  const results = await confirmItemDelivered(req.params);
+  console.log("hi");
+  const result = await confirmItemDelivered(req.params);
   res.status(result.status).send(result.status === 200 ? "delivered" : "Error");
 });
 
 userRoute.get("/donation/confirmPickup/:id", async (req, res) => {
-  const results = await confirmItemDelivered(req.params);
+  const result = await confirmPickupDonation(req.params);
   res.status(result.status).send(result.status === 200 ? "pickedup" : "Error");
 });
 
