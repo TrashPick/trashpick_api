@@ -85,12 +85,12 @@ userRoute.get(
 userRoute.get("/donation/confirmDelivery/:id", async (req, res) => {
   console.log("hi");
   const result = await confirmItemDelivered(req.params);
-  res.status(result.status).send(result.status === 200 ? "delivered" : "Error");
+  res.status("delivered");
 });
 
 userRoute.get("/donation/confirmPickup/:id", async (req, res) => {
   const result = await confirmPickupDonation(req.params);
-  res.status(result.status).send(result.status === 200 ? "pickedup" : "Error");
+  res.send("pickedup");
 });
 
 userRoute.get("/courier/job/:id", async (req, res) => {
