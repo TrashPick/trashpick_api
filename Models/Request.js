@@ -13,7 +13,7 @@ const Request = new Schema({
     },
   },
   delivered: { type: Boolean, default: false },
-  deliveryDate: { type: String },
+  deliveryDate: { type: Number },
   courier: { type: String },
   user: { type: String },
   mealType: { type: String, enum: ["breakfast", "lunch", "supper"] },
