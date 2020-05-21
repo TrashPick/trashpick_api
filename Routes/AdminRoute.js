@@ -64,6 +64,7 @@ adminRoute.post("/admin/addSponsor", async (req, res) => {
 });
 
 adminRoute.get("/admin/sponsors", async (req, res) => {
+  console.log("Sponsors");
   const gallery = await AdminServices.getSponsors();
   res.send(gallery);
 });
@@ -72,10 +73,8 @@ adminRoute.get("/admin/sponsor/delete/:id", async (req, res) => {
   await AdminServices.deleteSponsor(req.params.id);
   res.send("deleted");
 });
-
 adminRoute.post("/admin/voucher/initialised", async (req, res) => {
   const vInit = await AdminServices.initializeVoucher(req.body);
   res.status(vInit.status).send("Done");
 });
-
 module.exports = adminRoute;
