@@ -13,6 +13,11 @@ adminRoute.get("/admin/requests", async (req, res) => {
   res.send(results);
 });
 
+adminRoute.get("/all", async (req, res) => {
+  const allUsers = await AdminServices.allUsers();
+  res.send(allUsers);
+});
+
 adminRoute.post("/admin/generateVouchers", async (req, res) => {
   console.log(req.body);
   const genResults = AdminServices.generateVoucher(req.body);
