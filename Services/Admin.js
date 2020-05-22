@@ -20,6 +20,11 @@ module.exports = {
     return Requests;
   },
 
+  allUsers: async () => {
+    const users = await User.find({});
+    return users;
+  },
+
   createVoucher: async ({ amount, serial, voucherCode }) => {
     const voucher = new Voucher({
       serial: serial,
@@ -124,11 +129,12 @@ module.exports = {
     return Events.findOneAndDelete({ _id: id });
   },
 
-  addSponsor: async ({ imgUrl, url, name }) => {
+  addSponsor: async ({ imgUrl, url, name, major }) => {
     const sponsor = new Sponsor({
       imgUrl,
       url,
       name,
+      major,
     });
 
     return await sponsor.save();
