@@ -5,6 +5,7 @@ const Gallery = require("../Models/Gallery");
 const User = require("../Models/User");
 const Events = require("../Models/Event");
 const Sponsor = require("../Models/Sponsor");
+const Team = require("../Models/Team");
 
 const { donate } = require("../Services/User");
 
@@ -127,6 +128,25 @@ module.exports = {
 
   deleteEvent: async (id) => {
     return Events.findOneAndDelete({ _id: id });
+  },
+
+  addTeam: async ({ name, imgUrl, email, position }) => {
+    const team = new Team({
+      name,
+      imgUrl,
+      email,
+      position,
+    });
+
+    return await team.save();
+  },
+
+  getTeam: async () => {
+    return await Team.find();
+  },
+
+  deleteTeam: async (id) => {
+    return Team.findOneAndDelete({ _id: id });
   },
 
   addSponsor: async ({ imgUrl, url, name, major }) => {

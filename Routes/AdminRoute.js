@@ -48,6 +48,21 @@ adminRoute.get("/admin/gallery/delete/:id", async (req, res) => {
   res.send("deleted");
 });
 
+adminRoute.post("/admin/addTeam", async (req, res) => {
+  const galleryResult = await AdminServices.addTeam(req.body);
+  res.send(galleryResult);
+});
+
+adminRoute.get("/admin/team", async (req, res) => {
+  const gallery = await AdminServices.getTeam();
+  res.send(gallery);
+});
+
+adminRoute.get("/admin/team/delete/:id", async (req, res) => {
+  await AdminServices.deleteTeam(req.params.id);
+  res.send("deleted");
+});
+
 adminRoute.post("/admin/addEvent", async (req, res) => {
   const galleryResult = await AdminServices.addEvent(req.body);
   res.send(galleryResult);
