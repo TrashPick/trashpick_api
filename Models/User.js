@@ -18,6 +18,7 @@ const User = new Schema({
     default: "user",
   },
 });
+
 User.methods.hashPassword = function (password) {
   this.password.salt = crypto.randomBytes(16).toString("hex");
   this.password.hash = crypto
