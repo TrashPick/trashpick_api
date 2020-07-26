@@ -25,9 +25,9 @@ module.exports = {
     });
 
     user.hashPassword(password);
+
     try {
       await user.save();
-
       return user;
     } catch (e) {
       if (e.code === 11000) {
